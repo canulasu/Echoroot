@@ -3,12 +3,14 @@ import os
 import sys
 import subprocess
 import platform
+import shutil
 
 parser = argparse.ArgumentParser(description="Echoroot Virtual Machine Software")
 
 parser.add_argument('-i', '--init', type=str, help='Set Up Echoroot')
 parser.add_argument('-n', '--new', type=str, help='Create a New Echroot')
 parser.add_argument('-o', '--open', type=str, help='Open an Echroot')
+parser.add_argument('-r', '--remove', type=str, help='Delete an Echroot')
 
 args = parser.parse_args()
 
@@ -84,3 +86,17 @@ if args.open:
 
         else:
             os.system(command)
+
+if args.remove:
+    name = args.remove
+    os.chdir(os.path.expanduser('~'))
+    try:
+        os.chdir('echoroot')
+    except FileNotFoundError:
+        print('Echoroot Is Not Set Up')
+        sys.exit()
+    try:
+        shutil.rmtree(name)
+    except FileNotFoundError:
+        print('Echoroot Does Not Exist')
+        sys.exit()
