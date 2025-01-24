@@ -4,6 +4,7 @@ import sys
 import subprocess
 import platform
 import shutil
+import signal
 
 parser = argparse.ArgumentParser(description="Echoroot Virtual Machine Software")
 
@@ -69,6 +70,11 @@ if args.open:
         print('Echoroot Does Not Exist')
         sys.exit()
 
+    def disable_control_c(signal_number, frame):
+        pass
+
+    signal.signal(signal.SIGINT, disable_control_c)
+
     while True:
 
         command = input(f'{name}@Echoroot ~ % ')
@@ -83,6 +89,11 @@ if args.open:
 
         elif command == 'whoami':
             print(name)
+
+        elif command.startswith('epm '):
+            if command.startswith('epm install '):
+                package_name = command.replace('emp install ', '').strip()
+                os.system(f'pip install {package_name} --target {os.getcwd()}')
 
         else:
             os.system(command)
