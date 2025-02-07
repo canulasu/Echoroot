@@ -12,6 +12,7 @@ parser.add_argument('-i', '--init', type=str, help='Set Up Echoroot')
 parser.add_argument('-n', '--new', type=str, help='Create a New Echroot')
 parser.add_argument('-o', '--open', type=str, help='Open an Echroot')
 parser.add_argument('-r', '--remove', type=str, help='Delete an Echroot')
+parser.add_argument('-e', '--export', type=str, help='Export an Echroot')
 
 args = parser.parse_args()
 
@@ -111,3 +112,15 @@ if args.remove:
     except FileNotFoundError:
         print('Echoroot Does Not Exist')
         sys.exit()
+
+if args.export:
+    entry = args.export
+    os.chdir(os.path.expanduser('~'))
+    try:
+        os.chdir('echoroot')
+    except FileNotFoundError:
+        print('Echoroot Is Not Set Up')
+        sys.exit()
+    
+    destination = str(os.path.expanduser('~')+'/'+str(entry))
+    shutil.copytree(entry, destination)
